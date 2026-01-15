@@ -1,21 +1,21 @@
 #!/bin/bash
-#SBATCH --job-name=Run153ChIP
+#SBATCH --job-name=EPR1_ChIP_Run154
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=ry00555@uga.edu
+#SBATCH --mail-user=vkp41821@uga.edu
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=24
 #SBATCH --mem=100gb
 #SBATCH --time=20:00:00
-#SBATCH --output=../MapCutAndRun153.%j.out
-#SBATCH --error=../MapCutAndRun153.%j.err
+#SBATCH --output=../EPR1_ChIP_Run154.%j.out
+#SBATCH --error=../EPR1_ChIP_Run154.%j.err
 
 cd $SLURM_SUBMIT_DIR
 
 #read in variables from the config file ($threads, $FASTQ, $OUTDIR, )
 
 source config.txt
-OUTDIR="/lustre2/scratch/ry00555/Run153/"
+OUTDIR="/lustre2/scratch/vkp41821/EPR1/ChIPseq"
 
 # if output directory doesn't exist, create it
   mkdir -p $OUTDIR
@@ -29,10 +29,10 @@ OUTDIR="/lustre2/scratch/ry00555/Run153/"
  BAMDIR="${OUTDIR}/SortedBamFiles"
  BEDDIR="${OUTDIR}/Beds"
 #   process reads using trimGalore
-#module load Trim_Galore
-#trim_galore --paired --length 20 --fastqc --gzip -o ${OUTDIR}/TrimmedReads ${FASTQ}/*fastq\.gz
+module load Trim_Galore
+trim_galore --paired --length 20 --fastqc --gzip -o ${OUTDIR}/TrimmedReads ${FASTQ}/*fastq\.gz
 
-FILES="${OUTDIR}/UnmappedTrimmedReads/*_L002_R1_001_val_1\.fq\.gz"
+FILES="${OUTDIR}/UnmappedTrimmedReads/*_L006_R1_001_val_1\.fq\.gz"
 
 #  Iterate over the files
  for f in $FILES
@@ -45,9 +45,8 @@ do
 #
 file=${f##*/}
 #  	remove ending from file name to create shorter names for bam files and other downstream output
-# name=${file/%_S[1-150]*_L001_R1_001_val_1.fq.gz/}
- #name=${file/%_S[1-990]*_L001_R1_001_val_1.fq.gz/}
-name=${file/%_S[1-990]*R1_001_val_1.fq.gz/}
+ name=${file/%_S[1-990]*_L006_R1_001_val_1.fq.gz/}
+#name=${file/%_S[1-990]*R1_001_val_1.fq.gz/}
 
 
 #  	 File Vars
@@ -87,7 +86,7 @@ ml MACS3
   do
      base=$(basename ${infile} .bam)
 #    Input=$BAMDIR/ ${infile} Input_Q30.bam
-  macs3 callpeak -t $infile -f BAMPE -n $base --broad -g 41037538 --broad-cutoff 0.1 --outdir $PEAKDIR --min-length 800 --max-gap 500 #-c $Input
+  macs3 callpeak -t $infile -f BAMPE -n $base --broad -g 41037538 --broad-cutoff 0.1 --outdir $PEAKDIR --min-length 400 --max-gap 500 #-c $Input
  done
 #
 # HOMERPEAKSDIR="${OUTDIR}/HomerPeaks"
