@@ -29,10 +29,10 @@ OUTDIR="/lustre2/scratch/vkp41821/EPR1/ChIPseq"
  BAMDIR="${OUTDIR}/SortedBamFiles"
  BEDDIR="${OUTDIR}/Beds"
 #   process reads using trimGalore
-module load Trim_Galore
-trim_galore --paired --length 20 --fastqc --gzip -o ${OUTDIR}/TrimmedReads ${FASTQ}/*fastq\.gz
+#module load Trim_Galore
+#trim_galore --paired --length 20 --fastqc --gzip -o ${OUTDIR}/TrimmedReads ${FASTQ}/*fastq\.gz
 
-FILES="${OUTDIR}/UnmappedTrimmedReads/*_L006_R1_001_val_1\.fq\.gz"
+FILES="${OUTDIR}/TrimmedReads/*_L006_R1_001_val_1\.fq\.gz"
 
 #  Iterate over the files
  for f in $FILES
